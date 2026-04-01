@@ -86,7 +86,7 @@ class KubeCtl:
         """Fetch the deployment configuration."""
         return self.apps_v1_api.read_namespaced_deployment(name, namespace)
 
-    def wait_for_ready(self, namespace, sleep=2, max_wait=300):
+    def wait_for_ready(self, namespace, sleep=2, max_wait=1800):
         """Wait for all pods in a namespace to be in a Ready state before proceeding."""
 
         console = Console()
@@ -118,7 +118,7 @@ class KubeCtl:
 
             raise Exception(f"[red]Timeout: Not all pods in namespace '{namespace}' reached the Ready state within {max_wait} seconds.")
     
-    def wait_for_namespace_deletion(self, namespace, sleep=2, max_wait=300):
+    def wait_for_namespace_deletion(self, namespace, sleep=2, max_wait=1800):
         """Wait for a namespace to be fully deleted before proceeding."""
 
         console = Console()
