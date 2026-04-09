@@ -57,6 +57,10 @@ class Orchestrator:
             self.kubectl.exec_command(
                 "kubectl apply -f https://openebs.github.io/charts/openebs-operator.yaml"
             )
+            # 暴力砍掉 Codespace/Kind 这种无特权 Docker 容器中必定陷入死循环的底层磁盘扫描守护进程 
+            self.kubectl.exec_command("kubectl delete daemonset openebs-ndm -n openebs --ignore-not-found")
+            self.kubectl.exec_command("kubectl delete daemonset openebs-ndm-node-exporter -n openebs --ignore-not-found")
+            
             self.kubectl.exec_command(
                 "kubectl patch storageclass openebs-hostpath -p '{\"metadata\": {\"annotations\":{\"storageclass.kubernetes.io/is-default-class\":\"true\"}}}'"
             )
