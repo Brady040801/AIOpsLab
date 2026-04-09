@@ -119,7 +119,9 @@ class Session:
         results_dir = self.results_dir if self.results_dir else RESULTS_DIR
         results_dir.mkdir(parents=True, exist_ok=True)
 
-        with open(results_dir / f"{self.session_id}_{self.start_time}.json", "w") as f:
+        agent_str = self.agent_name if self.agent_name else "agent"
+        problem_str = self.pid if self.pid else "unknown_problem"
+        with open(results_dir / f"{agent_str}_{problem_str}.json", "w") as f:
             json.dump(self.to_dict(), f, indent=4)
 
     def to_wandb(self):
