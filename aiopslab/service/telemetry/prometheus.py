@@ -79,6 +79,12 @@ class Prometheus:
                 self._apply_pvc()
 
         Helm.install(**self.helm_configs)
+        
+        # 暴力移除在无特权 Docker 虚拟机（Codespace）中一定死循环的底层物理机监控进程
+        KubeCtl().exec_command(
+            f"kubectl delete daemonset -l app.kubernetes.io/name=prometheus-node-exporter -n {self.namespace} --ignore-not-found"
+        )
+        
         Helm.assert_if_deployed(self.namespace)
 
     def teardown(self):
